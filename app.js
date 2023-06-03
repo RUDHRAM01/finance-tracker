@@ -25,6 +25,15 @@ app.use(session({
 }));
 
 app.use("/user", User);
+app.get("/", (req, res) => {
+    res.render("Home");
+})
+app.get("/login", (req, res) => {
+    res.render("Login");
+})
+app.get("/register", (req, res) => {
+    res.render("Register");
+})
 
 app.listen(8000, () => {
     console.log("app is running...");

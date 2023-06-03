@@ -24,6 +24,7 @@ app.use(session({
     cookie: { secure: false }
 }));
 
+
 app.use("/user", User);
 app.get("/", (req, res) => {
     res.render("Home");
@@ -34,7 +35,9 @@ app.get("/login", (req, res) => {
 app.get("/register", (req, res) => {
     res.render("Register");
 })
-
+app.get("/*", (req, res) => {
+    res.render("Error404");
+})
 app.listen(8000, () => {
     console.log("app is running...");
     mongoose.connect(process.env.MONGO_DB_URL, {

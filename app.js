@@ -26,7 +26,6 @@ app.use(session({
 
 app.use("/user", User);
 
-
 app.listen(8000, () => {
     console.log("app is running...");
     mongoose.connect(process.env.MONGO_DB_URL, {

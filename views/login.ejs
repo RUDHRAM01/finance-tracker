@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGIN</title>
+    <style>
+    body{
+        margin: 0%;
+        padding: 0%;
+    }
+    .container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #393e467d;
+        height: 100vh;
+        width: 100%;
+    }
+    .parItem{
+        padding: 0 20px;
+    }
+    .childItem{
+        border-style: outset;
+        background-color: whitesmoke;
+        padding: 20px 40px;
+        border-radius: 10px;
+    }
+    .head>h1{
+        text-align: center;
+    }
+    .email{
+        margin: 1em 0;
+        width: 100%;
+    }
+    .email>input{
+        padding: 10px;
+        border-radius: 5px;
+        width: 100%;
+        border-style: hidden;
+    }
+    .pass{
+        margin : 1em 0;
+        width: 100%;
+    }
+    .pass>input{
+        padding: 10px;
+        border-radius: 5px;
+        width: 100%;
+        border-style: hidden;
+    }
+    .submit{
+        margin: 1em 0 0;
+        padding: 0 2%;
+    }
+    .submit>button{
+        background-color: lightblue;
+        cursor: pointer;
+        border-radius: 5px;
+        padding: 10px;
+        width: 100%;
+        border-style: hidden;
+    }
+    .link{
+        margin: 1em 0;
+        display: flex;
+        flex-direction: row;
+    }
+    .link>a{
+        margin: 0 20px;
+        color: rgb(81, 81, 177);
+        cursor: pointer;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="parItem">           
+            <div class="childItem">
+                <div class="head">
+                    <h1>LOGIN</h1>
+                </div>
+                <form>
+                    <div class = "email">
+                        <input type="email" placeholder="Email Address"/>
+                    </div>
+                    <div class = "pass">
+                        <input type="password" placeholder="Password"/>
+                    </div>
+                    <div class = "submit">
+                        <button>LOGIN</button>
+                    </div>
+                    <div class = "link">
+                        <a>Forgot Password</a>
+                        <a>New User? Sign Up</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

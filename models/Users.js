@@ -7,6 +7,7 @@ const schema = new mongoose.Schema({
     firstName: String,
     lastName: String,
     age: Number,
+    current_balance: Number,
     timestamp: {
         type: Date,
         default: Date.now

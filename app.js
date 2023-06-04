@@ -35,6 +35,10 @@ app.get("/login", (req, res) => {
 app.get("/register", (req, res) => {
     res.render("Register");
 })
+
+app.get("/dashboard", (req, res) => {
+    res.render("Dashboard");
+})
 app.get("/*", (req, res) => {
     res.render("Error404");
 })

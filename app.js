@@ -24,6 +24,15 @@ app.use(session({
     cookie: { secure: false }
 }));
 
+// check login
+function checkLogin(req, res, next) {
+    if (req.session.user) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+}
+
 
 app.use("/user", User);
 app.get("/", (req, res) => {
@@ -36,7 +45,7 @@ app.get("/register", (req, res) => {
     res.render("Register");
 })
 
-app.get("/dashboard", (req, res) => {
+app.get("/dashboard", checkLogin, (req, res) => {
     res.render("Dashboard");
 })
 app.get("/*", (req, res) => {

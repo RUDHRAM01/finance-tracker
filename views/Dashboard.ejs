@@ -28,7 +28,12 @@
     <div class="dashboard">
         <div class="header">
             <div id="left">
-                <h2 style="font-family: 'Dancing Script', cursive; font-size:3rem;">Hi Aditya Soni</h2>
+                <% if(typeof user != 'undefined'){ %>
+                    <h2 style="font-family: 'Dancing Script', cursive; font-size:3rem;">Hi <%= user.name %></h2>
+                <% }else {%>
+                    <h2 style="font-family: 'Dancing Script', cursive; font-size:3rem;">Hi User</h2>
+                <% } %>
+
                 <span>Save time and money</span>
             </div>
             <div id="right">

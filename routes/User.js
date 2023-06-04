@@ -10,11 +10,9 @@ userRoute.use(bodyParser.urlencoded({ extended: false }));
 userRoute.set('view engine', 'ejs');
 userRoute.set('views', './views');
 
-userRoute.get("/dashboard/profile",userController.securePathLayer, function (req, res) { 
-    res.render("Profile");
-});
+userRoute.get("/dashboard/profile",userController.securePathLayer, userController.GetUserProfile);
 
-userRoute.post("/update", userController.UpdateProfile);
+userRoute.post("/dashboard/profile", userController.UpdateProfile);
 
 userRoute.get("/login", userController.middleWare, function (req, res) {
     res.render("Login");
@@ -28,9 +26,7 @@ userRoute.get("/register", userController.middleWare, function (req, res) {
 
 userRoute.post("/register", userController.RegisterUser);
 
-userRoute.get("/dashboard",userController.securePathLayer, function (req, res) {
-    res.render("Dashboard");
-});
+userRoute.get("/dashboard",userController.securePathLayer, userController.GetDashboard);
 
 userRoute.get("/", function (req, res) {
     res.render("Home");

@@ -137,11 +137,40 @@ async function UpdateProfile(req, res) {
     }
 }
 
+async function GetUserProfile(req, res) {
+    try {
+        const user = await User.findOne({ _id: req.session.user._id });
+        if (user) {
+            console.log(user);
+            res.render('Profile', { user , name:user.name });
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+async function GetDashboard(req, res) {
+    try {
+        const user = await User.findOne({ _id: req.session.user._id });
+        if (user) {
+            res.render('Dashboard', { user });
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+
+
 module.exports = {
     RegisterUser,
     LoginUser,
     UpdateProfile,
     verifyMail,
     middleWare,
-    securePathLayer
+    securePathLayer,
+    GetUserProfile,
+    GetDashboard
 }

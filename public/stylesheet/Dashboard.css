@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Andika&family=Great+Vibes&family=Lato&family=Playfair&family=Poppins&family=Saira+Stencil+One&family=Varela+Round&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Andika&family=Dancing+Script:wght@700&family=Great+Vibes&family=Lato&family=Playfair&family=Poppins&family=Saira+Stencil+One&family=Varela+Round&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Andika&family=Dancing+Script:wght@700&family=Great+Vibes&family=Lato&family=Playfair&family=Poppins&family=Saira+Stencil+One&family=Varela+Round&family=Zilla+Slab&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Zilla Slab', serif;
+  font-size: 1.02em;
+}
+
+.navbar-brand {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dashboard {
+  background-color: rgb(245, 245, 245);
+}
+#user-icon{
+    width: 3rem;
+    height: 3rem;
+}
+#logo{
+    width: 6rem;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.data {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+}
+
+.icons {
+  width: 2rem;
+}
+
+.expenses {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 20rem;
+  height: 8rem;
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  font-size: 1.1em;
+}
+
+.box1 {
+  background-color: lightcoral;
+  box-shadow: 1px 4px 41px 5px rgba(240, 128, 128, 0.39);
+  -webkit-box-shadow: 1px 4px 41px 5px rgba(240, 128, 128, 0.39);
+  -moz-box-shadow: 1px 4px 41px 5px rgba(240, 128, 128, 0.39);
+}
+
+.box2 {
+  background-color: lightblue;
+  box-shadow: 1px 4px 41px 5px lightblue;
+  -webkit-box-shadow: 1px 4px 41px 5px rgba(173, 216, 230, 0.39);
+  -moz-box-shadow: 1px 4px 41px 5px rgba(173, 216, 230, 0.39);
+}
+
+.box3 {
+  background-color: lightgreen;
+  box-shadow: 1px 4px 41px 5px lightgreen;
+  -webkit-box-shadow: 1px 4px 41px 5px rgba(144, 238, 144, 0.39);
+  -moz-box-shadow: 1px 4px 41px 5px rgba(144, 238, 144, 0.39);
+}
+
+.expenses>div {
+  display: flex;
+  flex-direction: column;
+}

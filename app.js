@@ -1,23 +1,14 @@
 const express = require("express")
 var path = require('path');
-const dotenv = require('dotenv');
 const mongoose = require("mongoose")
-const User = require("./router/User")
+const dotenv = require('dotenv');
 const session = require('express-session');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
 dotenv.config();
-
-
+const userRoute = require('./routes/User');
 const app = express();
-app.set('view engine', 'ejs');
-app.set('views', './views');
+
+
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(session({
     secret: 'secret',
     resave: true,
@@ -25,41 +16,8 @@ app.use(session({
     cookie: { secure: false }
 }));
 
-// check login
-function checkLogin(req, res, next) {
-    if (req.session.user) {
-        next();
-    } else {
-        res.redirect('/login');
-    }
-}
+app.use("/", userRoute);
 
-
-app.use("/user", User);
-app.get("/", (req, res) => {
-    res.render("Home");
-})
-app.get("/login", (req, res) => {
-    if (req.session.user) {
-        res.redirect('/dashboard');
-    } else {
-        res.render("Login");
-    }
-})
-app.get("/register", (req, res) => {
-    if (req.session.user) {
-        res.redirect('/dashboard');
-    } else {
-        res.render("Register");
-    }
-})
-
-app.get("/dashboard", checkLogin, (req, res) => {
-    res.render("Dashboard");
-})
-app.get("/*", (req, res) => {
-    res.render("Error404");
-})
 app.listen(8000, () => {
     console.log("app is running...");
     mongoose.connect(process.env.MONGO_DB_URL, {

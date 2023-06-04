@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheet/global.css" />
+
+    <!-- external css start-->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.1/mdb.min.css"
+      rel="stylesheet"
+    />
+    <!-- external css end-->
+   <style>
+    body{
+        background-color: black;
+    }
+    .mySection {
+      min-height: 70vh;
+    }
+    input{
+        width: 100%;
+    }
+    .submit{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background-color: black;
+        border: 2px solid white;
+        color: white;
+    }
+    .update{
+      display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background-color: rgb(255, 255, 255);
+        border: 2px solid rgb(0, 0, 0);
+    }
+   </style>
+    <title>Profile</title>
+  </head>
+  <body>
+    <form action="/profile" method="POST">
+    <div class="container py-5" style="min-height: 70vh;">
+        <div class="row">
+          <div class="col">
+            <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+              <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  User Profile
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+
+    <section  class="mySection">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="card mb-4">
+              <div class="card-body text-center">
+                <img
+                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                  alt="avatar"
+                  class="rounded-circle img-fluid"
+                  style="width: 150px"
+                />
+                <h5 class="my-3">John Smith</h5>
+              </div>
+              
+              <div class="col-sm-12">
+                <div class="submit">
+                  <a href="/">Upload Photo</a>
+                </div>
+          </div>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Full Name</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0"><input type="text" name="name" placeholder="name"></p>
+                  </div>
+              </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Email</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0"><input type="email" readonly name="email" placeholder="example@example.com"></p>
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Phone</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0"><input type="number" name="phone1" placeholder="(097) 234-5678"></p>
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Mobile</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0"><input type="number" name="phone2" placeholder="(098) 765-4321"></p>
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Address</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0"><input type="address" name="address" id="address" placeholder="address"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="update">
+              <Button  class = "submit">Update Profile</button>
+            </div>
+          </div>
+          </section>
+      </div>
+    </form>
+  </body>
+</html>

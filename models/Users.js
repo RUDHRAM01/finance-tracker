@@ -4,9 +4,10 @@ const schema = new mongoose.Schema({
     username: String,
     password: String,
     email: String,
-    firstName: String,
-    lastName: String,
-    age: Number,
+    name: String,
+    phone1: Number,
+    phone2: Number,
+    address: String,
     current_balance: Number,
     timestamp: {
         type: Date,

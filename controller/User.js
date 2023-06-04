@@ -1,11 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const bcrypt = require('bcrypt');
 const User = require('../models/Users');
+const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 
-router.post('/register', async (req, res) => {
+async function RegisterUser(req, res) {
     const { password, email } = req.body;
     console.log(req.body);
     const hash = await bcrypt.hash(password, saltRounds);
@@ -15,15 +13,11 @@ router.post('/register', async (req, res) => {
     });
     await user.save();
     res.redirect('/login');
-});
+}
 
-
-router.post('/login', async (req, res) => {
-    if (req.session.user) {
-        res.redirect('/dashboard');
-    }
+async function LoginUser(req, res) {
     const { email, password } = req.body;
-    console.log(email, password)
+
     if (!email || !password) {
         res.redirect('/login');
     } else {
@@ -40,16 +34,33 @@ router.post('/login', async (req, res) => {
             } else {
                 res.redirect('/login');
             }
-        } catch (error) {
+        }catch(error) {
             // Handle the error appropriately
             console.error(error);
             res.redirect('/login');
         }
     }
-});
+}
+
+async function UpdateProfile(req, res) {
+    const { name, email, phone1, phone2, address } = req.body;
+    try {
+        const user = await User.updateOne({ email: email }, { $set: { name: name, phone1: phone1, phone2: phone2, address: address } });
+
+        if (user) {
+            res.redirect('/dashboard/profile');
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 
+module.exports = {
+    RegisterUser,
+    LoginUser,
+    UpdateProfile
+}
 
-module.exports = router;
 
 

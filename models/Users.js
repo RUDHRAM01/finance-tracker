@@ -9,6 +9,10 @@ const schema = new mongoose.Schema({
     phone2: Number,
     address: String,
     current_balance: Number,
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
     timestamp: {
         type: Date,
         default: Date.now

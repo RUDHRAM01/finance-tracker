@@ -33,6 +33,14 @@
               <a href="/login">Already have an account?</a>
             </div>
           </form>
+<% 
+            if(typeof message != 'undefined'){ 
+              %>
+              <div class="message">
+                <p><%= message %></p>
+              </div>
+            <% } 
+%>
         </div>
       </div>
     </div>

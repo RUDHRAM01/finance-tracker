@@ -1,41 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/stylesheet/global.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="/stylesheet/global.css" />
 
-     <!-- external css start-->
-     <link rel="stylesheet" href="/stylesheet/Login.css">
-     <!-- external css end-->
-     
+    <!-- external css start-->
+    <link rel="stylesheet" href="/stylesheet/Login.css" />
+    <!-- external css end-->
+
     <title>LOGIN</title>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="parItem">           
-            <div class="childItem">
-                <form action="/login" method="POST">
-                <div class="head">
-                    <h1>LOGIN</h1>
+      <div class="parItem">
+        <div class="childItem">
+            <% if(typeof message != 'undefined'){ %>
+                <div class="message">
+                  <p><%= message %></p>
                 </div>
-                    <div class = "email">
-                        <input type="email" name="email" placeholder="Email Address"/>
-                    </div>
-                    <div class = "pass">
-                        <input type="password" name="password" placeholder="Password"/>
-                    </div>
-                    <div class = "submit">
-                        <button>LOGIN</button>
-                    </div>
-                    <div class = "link">
-                        <a>Forgot Password</a>
-                        <a href="/register">New User? Sign Up</a>
-                    </div>
-                </form>
+                <% } %>
+          <form action="/login" method="POST">
+            <div class="head">
+              <h1>LOGIN</h1>
             </div>
+            <div class="email">
+              <input type="email" name="email" placeholder="Email Address" />
+            </div>
+            <div class="pass">
+              <input type="password" name="password" placeholder="Password" />
+            </div>
+            <div class="submit">
+              <button>LOGIN</button>
+            </div>
+            <div class="link">
+              <a>Forgot Password</a>
+              <a href="/register">New User? Sign Up</a>
+            </div>
+          </form>
+       
         </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

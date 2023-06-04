@@ -1,7 +1,54 @@
 const User = require('../models/Users');
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
 const saltRounds = 10;
 
+const sendVerifyMail = (email, id) => {
+    try {
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                host: 'smtp.gmail.com',
+                port: 465,
+                secure: false,
+                requireTLS: true,
+                user: 'financetrackermail@gmail.com',
+                pass: 'kuuaatxdetwzebgh'
+            }
+        });
+        const mailOptions = {
+            from: 'financetrackermail@gmail.com',
+            to: email,
+            subject: 'Verify your email',
+            html: `<h1>Hi user</h1><br><p>Click <a href="http://localhost:8000/verify?id=${id}">here</a> to verify your email</p>`
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent successfully: ' + info.response);
+            }
+        });
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+const verifyMail = async (req, res) => {
+    try {
+        const { id } = req.query;
+        const user = await User.updateOne({ _id: id }, { $set: { isVerified: true } });
+        if (user) {
+            res.render('EmailVerify');
+        } else {
+            res.render('Register', { message: 'Your email is not verified, Please try again' });
+        }
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
 
 async function RegisterUser(req, res) {
     const { password, email } = req.body;
@@ -11,8 +58,13 @@ async function RegisterUser(req, res) {
         password: hash,
         email
     });
-    await user.save();
-    res.redirect('/login');
+    const userData = await user.save();
+    if (userData) {
+        sendVerifyMail(req.body.email,userData._id);
+        res.render('Register', { message: 'Your registration is successful, Please verify your email' });
+    } else {
+        res.render('Register', { message: 'Registration failed, Please try again' });
+    }
 }
 
 async function LoginUser(req, res) {
@@ -26,13 +78,17 @@ async function LoginUser(req, res) {
             if (user) {
                 const result = await bcrypt.compare(password, user.password);
                 if (result) {
-                    req.session.user = user;
-                    res.redirect('/dashboard');
+                    const isVerified = user.isVerified;
+                    if (isVerified) {
+                        res.redirect('/dashboard');
+                    } else {
+                        res.render('Login', { message: 'Your email is not verified, Please try again' });
+                    }
                 } else {
-                    res.redirect('/login');
+                    res.render('Login', { message: 'Invalid credentials, Please try again' });
                 }
             } else {
-                res.redirect('/login');
+                res.render('Login', { message: 'Invalid credentials, Please try again' });
             }
         }catch(error) {
             // Handle the error appropriately
@@ -55,11 +111,11 @@ async function UpdateProfile(req, res) {
     }
 }
 
-
 module.exports = {
     RegisterUser,
     LoginUser,
-    UpdateProfile
+    UpdateProfile,
+    verifyMail
 }
 
 

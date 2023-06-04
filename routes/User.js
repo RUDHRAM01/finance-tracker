@@ -36,5 +36,12 @@ userRoute.get("/", function (req, res) {
     res.render("Home");
 });
 
+userRoute.get('/verify', userController.verifyMail)
+
+userRoute.get('/*', (req, res) => {
+    res.render('Error404');
+})
+
+
 
 module.exports = userRoute;

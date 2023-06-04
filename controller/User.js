@@ -69,18 +69,26 @@ const securePathLayer = (req, res, next) => {
 
 async function RegisterUser(req, res) {
     const { password, email } = req.body;
-    console.log(req.body);
-    const hash = await bcrypt.hash(password, saltRounds);
-    const user = new User({
-        password: hash,
-        email
-    });
-    const userData = await user.save();
-    if (userData) {
-        sendVerifyMail(req.body.email,userData._id);
-        res.render('Register', { message: 'Your registration is successful, Please verify your email' });
-    } else {
-        res.render('Register', { message: 'Registration failed, Please try again' });
+    try {
+        const checkAlready = await User.findOne({ email });
+        if (checkAlready) {
+            res.render('Register', { message: 'Email already exists, Please try to login' });
+        } else {
+            const hash = await bcrypt.hash(password, saltRounds);
+            const user = new User({
+                password: hash,
+                email
+            });
+            const userData = await user.save();
+            if (userData) {
+                sendVerifyMail(req.body.email,userData._id);
+                res.render('Register', { message: 'Your registration is successful, Please verify your email' });
+            } else {
+                res.render('Register', { message: 'Registration failed, Please try again' });
+            }
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
 

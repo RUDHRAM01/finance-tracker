@@ -10,25 +10,25 @@ userRoute.use(bodyParser.urlencoded({ extended: false }));
 userRoute.set('view engine', 'ejs');
 userRoute.set('views', './views');
 
-userRoute.get("/dashboard/profile", function (req, res) { 
+userRoute.get("/dashboard/profile",userController.securePathLayer, function (req, res) { 
     res.render("Profile");
 });
 
 userRoute.post("/update", userController.UpdateProfile);
 
-userRoute.get("/login", function (req, res) {
+userRoute.get("/login", userController.middleWare, function (req, res) {
     res.render("Login");
 });
 
 userRoute.post("/login", userController.LoginUser);
 
-userRoute.get("/register", function (req, res) {
+userRoute.get("/register", userController.middleWare, function (req, res) {
     res.render("Register");
 });
 
 userRoute.post("/register", userController.RegisterUser);
 
-userRoute.get("/dashboard", function (req, res) {
+userRoute.get("/dashboard",userController.securePathLayer, function (req, res) {
     res.render("Dashboard");
 });
 

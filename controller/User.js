@@ -50,6 +50,23 @@ const verifyMail = async (req, res) => {
     }
 }
 
+const middleWare = (req, res, next) => {
+    console.log(req.session.user);
+    if (req.session.user) {
+        res.redirect('/dashboard');
+    } else {
+        next();
+    }
+}
+
+const securePathLayer = (req, res, next) => {
+    if (req.session.user) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+}
+
 async function RegisterUser(req, res) {
     const { password, email } = req.body;
     console.log(req.body);
@@ -80,6 +97,7 @@ async function LoginUser(req, res) {
                 if (result) {
                     const isVerified = user.isVerified;
                     if (isVerified) {
+                        req.session.user = user;
                         res.redirect('/dashboard');
                     } else {
                         res.render('Login', { message: 'Your email is not verified, Please try again' });
@@ -115,8 +133,7 @@ module.exports = {
     RegisterUser,
     LoginUser,
     UpdateProfile,
-    verifyMail
+    verifyMail,
+    middleWare,
+    securePathLayer
 }
-
-
-

@@ -1,4 +1,5 @@
 const express = require("express")
+var path = require('path');
 const dotenv = require('dotenv');
 const mongoose = require("mongoose")
 const User = require("./router/User")
@@ -12,7 +13,7 @@ dotenv.config();
 const app = express();
 app.set('view engine', 'ejs');
 app.set('views', './views');
-
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

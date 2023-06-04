@@ -46,7 +46,11 @@ app.get("/login", (req, res) => {
     }
 })
 app.get("/register", (req, res) => {
-    res.render("Register");
+    if (req.session.user) {
+        res.redirect('/dashboard');
+    } else {
+        res.render("Register");
+    }
 })
 
 app.get("/dashboard", checkLogin, (req, res) => {

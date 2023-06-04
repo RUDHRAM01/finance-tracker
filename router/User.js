@@ -19,7 +19,9 @@ router.post('/register', async (req, res) => {
 
 
 router.post('/login', async (req, res) => {
-    ;
+    if (req.session.user) {
+        res.redirect('/dashboard');
+    }
     const { email, password } = req.body;
     console.log(email, password)
     if (!email || !password) {

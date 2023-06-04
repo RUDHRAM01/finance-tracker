@@ -39,7 +39,11 @@ app.get("/", (req, res) => {
     res.render("Home");
 })
 app.get("/login", (req, res) => {
-    res.render("Login");
+    if (req.session.user) {
+        res.redirect('/dashboard');
+    } else {
+        res.render("Login");
+    }
 })
 app.get("/register", (req, res) => {
     res.render("Register");

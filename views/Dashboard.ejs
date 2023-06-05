@@ -82,20 +82,25 @@
                         <th scope="col" width="10%">Description</th>
                         <th scope="col" width="10%">Paid to</th>
                         <th scope="col" width="20%">Amount</th>
-                        <th scope="col" width="15%">Actions</th> 
+                        <th scope="col" width="15%">Edit Data</th>
+                        <th scope="col" width="15%">Delete Data</th> 
                       </tr>
                     </thead>
                     <tbody id="tableBody">
                         <% if (transactionInfo !== null) { %>
                           <% for (let i = 0; i < transactionInfo?.length; i++) { %>
                             <tr>
+                                <form action="/updateTransaction?id=<%= transactionInfo[i].id %>" method="POST">
                               <th scope="row"><%= i + 1 %></th>
                               <td><input type="date" name="date" value="<%= transactionInfo[i].date %>"></td>
                               <td><input type="text" name="description" value="<%= transactionInfo[i].description %>"></td>
                               <td><input type="text" name="paidTo" value="<%= transactionInfo[i].paidTo %>"></td>
                               <td><input type="number" name="amount" value="<%= transactionInfo[i].amount %>"></td>
                                 <td>
-                                    <form action="/updateTransaction?id=<%= transactionInfo[i].id %>" method="POST"><Button type="submit" class="btn btn-primary">Edit</Button></form>
+                                   <Button type="submit" class="btn btn-primary">Edit</Button>
+                                </td>
+                            </form>
+                                <td>
                                     <form action="/deleteTransaction?id=<%= transactionInfo[i].id %>" method="POST"><button class="btn btn-danger">Delete</button></form>
                                 </td>
                             </tr>

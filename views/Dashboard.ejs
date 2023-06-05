@@ -90,23 +90,27 @@
                         <% if (transactionInfo !== null) { %>
                           <% for (let i = 0; i < transactionInfo?.length; i++) { %>
                             <tr>
-                                <form action="/updateTransaction?id=<%= transactionInfo[i].id %>" method="POST">
-                              <th scope="row"><%= i + 1 %></th>
-                              <td><input type="date" name="date" value="<%= transactionInfo[i].date %>"></td>
-                              <td><input type="text" name="description" value="<%= transactionInfo[i].description %>"></td>
-                              <td><input type="text" name="paidTo" value="<%= transactionInfo[i].paidTo %>"></td>
-                              <td><input type="number" name="amount" value="<%= transactionInfo[i].amount %>"></td>
+                              <form action="/updateTransaction" method="POST">
+                                <th scope="row"><%= i + 1 %></th>
+                                <td><input type="date" name="date" value="<%= transactionInfo[i].date %>"></td>
+                                <td><input type="text" name="description" value="<%= transactionInfo[i].description %>"></td>
+                                <td><input type="text" name="paidTo" value="<%= transactionInfo[i].paidTo %>"></td>
+                                <td><input type="number" name="amount" value="<%= transactionInfo[i].amount %>"></td>
                                 <td>
-                                   <Button type="submit" class="btn btn-primary">Edit</Button>
+                                  <button type="submit" class="btn btn-primary"> <input type="text" value="<%= transactionInfo[i].id %>" name="id" style="width:0%;visibility: hidden;">Edit</button>
                                 </td>
-                            </form>
-                                <td>
-                                    <form action="/deleteTransaction?id=<%= transactionInfo[i].id %>" method="POST"><button class="btn btn-danger">Delete</button></form>
-                                </td>
+                               
+                              </form>
+                              <td>
+                                <form action="/deleteTransaction" method="POST">
+                                  <button class="btn btn-danger"> <input type="text" value="<%= transactionInfo[i].id %>" name="id" style="width:0%;visibility: hidden;">Delete</button>
+                                </form>
+                              </td>
                             </tr>
                           <% } %>
                         <% } %>
                       </tbody>
+                      
                       
                   </table>
                   

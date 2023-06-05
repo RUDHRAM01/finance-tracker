@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const TransactionModel = require('../models/Transactions');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+const Transaction = require('../models/Transactions');
 const { ObjectId } = mongoose.Types;
 const saltRounds = 10;
 
@@ -168,76 +169,99 @@ async function GetDashboard(req, res) {
 
 
 async function DoTransaction(req, res) {
-    const { date,description,amount,paidTo } = req.body;
+    const { date, description, amount, paidTo } = req.body;
     try {
-        const transactionData = await TransactionModel.findOne({ id: req.session.user._id });
-        if (transactionData === null) {
-            const transaction = new TransactionModel({
-                id: req.session.user._id,
-                transactions: [{
-                    id: new ObjectId(),
-                    date,
-                    description,
-                    amount,
-                    paidTo
-                }]
-            });
-            const transactionResult = await transaction.save();
-            if (transactionResult) {
-                res.redirect('/dashboard');
-            } else {
-                res.redirect('/dashboard');
-            }
+      const transactionData = await TransactionModel.findOne({ id: req.session.user._id });
+      if (transactionData === null) {
+        const transaction = new TransactionModel({
+          id: req.session.user._id,
+          transactions: [{
+            id: new ObjectId(),
+            date,
+            description,
+            amount,
+            paidTo
+          }]
+        });
+        const transactionResult = await transaction.save();
+        if (transactionResult) {
+          res.redirect('/dashboard');
         } else {
-            const transaction = await TransactionModel.updateOne({ id: req.session.user._id }, { $push: { transactions: {  id: new ObjectId(),date, description, amount, paidTo } } });
-            if (transaction) {
-                res.redirect('/dashboard');
-            } else {
-                res.redirect('/dashboard');
-            }
+          res.redirect('/dashboard');
         }
-    }catch(error) {
-        console.error(error);
+      } else {
+        const newTransaction = {
+          id: new ObjectId(),
+          date,
+          description,
+          amount,
+          paidTo
+        };
+        transactionData.transactions.push(newTransaction);
+        const updateResult = await transactionData.save();
+        if (updateResult) {
+          res.redirect('/dashboard');
+        } else {
+          res.redirect('/dashboard');
+        }
+      }
+    } catch (error) {
+      console.error(error);
     }
-}
-
+  }
+  
 
 async function DeleteTransaction(req, res) {
-    const { id } = req.params;
+    const id = req.body.id;
+    console.log(id);
     try {
         const transactionData = await TransactionModel.findOne({ id: req.session.user._id });
         if (transactionData) {
-            const transaction = await TransactionModel.updateOne({ id: req.session.user._id }, { $pull: { transactions: { id: id } } });
-            if (transaction) {
-                res.redirect('/dashboard');
+            const transaction = transactionData.transactions.filter((item) => item.id != id);
+            transactionData.transactions = transaction;
+            const updateResult = await transactionData.save();
+            if (updateResult) {
+            res.redirect('/dashboard');
             } else {
-                res.redirect('/dashboard');
+            res.redirect('/dashboard');
             }
         }
-    }catch(error) {
+    }
+    catch (error) {
         console.error(error);
     }
 }
 
 
 async function UpdateTransaction(req, res) {
-    const { id } = req.params;
-    const { date,description,amount,paidTo } = req.body;
+    const { date, description, amount, paidTo, id } = req.body;
     try {
         const transactionData = await TransactionModel.findOne({ id: req.session.user._id });
         if (transactionData) {
-            const transaction = await TransactionModel.updateOne({ id: req.session.user._id }, { $set: { transactions: { id: id,date, description, amount, paidTo } } });
-            if (transaction) {
-                res.redirect('/dashboard');
-            } else {
-                res.redirect('/dashboard');
+            const index = transactionData.transactions.findIndex((item) => item.id == id);
+            transactionData.transactions[index].date = date;
+            transactionData.transactions[index].description = description;
+            transactionData.transactions[index].amount = amount;
+            transactionData.transactions[index].paidTo = paidTo;
+            
+            const deleteAllTransaction = await TransactionModel.deleteOne({ id: req.session.user._id });
+            if (deleteAllTransaction) {
+                const transaction = new TransactionModel({
+                    id: req.session.user._id,
+                    transactions: transactionData.transactions
+                });
+                const transactionResult = await transaction.save();
+                if (transactionResult) {
+                    res.redirect('/dashboard');
+                } else {
+                    res.redirect('/dashboard');
+                }
             }
         }
-    }catch(error) {
+    } catch (error) {
         console.error(error);
     }
 }
-
 
 module.exports = {
     RegisterUser,

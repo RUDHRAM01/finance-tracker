@@ -160,7 +160,7 @@ async function GetDashboard(req, res) {
         const transactionData = await TransactionModel.findOne({ id: req.session.user._id });
         let transactionInfo = transactionData?.transactions;
         if (user) {
-            res.render('Dashboard', { user,transactionInfo });
+            res.render('Dashboard', { user,transactionInfo,balance:user.current_balance,totalDebit:user.total_withdrawals,totalCredit:user.total_deposits });
         }
     } catch (error) {
         console.error(error);
@@ -169,7 +169,9 @@ async function GetDashboard(req, res) {
 
 
 async function DoTransaction(req, res) {
-    const { date, description, amount, paidTo } = req.body;
+    const { date, description, amount, paidTo, activity } = req.body;
+    
+        
     try {
       const transactionData = await TransactionModel.findOne({ id: req.session.user._id });
       if (transactionData === null) {
@@ -180,7 +182,8 @@ async function DoTransaction(req, res) {
             date,
             description,
             amount,
-            paidTo
+              paidTo,
+            activity
           }]
         });
         const transactionResult = await transaction.save();
@@ -195,7 +198,8 @@ async function DoTransaction(req, res) {
           date,
           description,
           amount,
-          paidTo
+            paidTo,
+          activity
         };
         transactionData.transactions.push(newTransaction);
         const updateResult = await transactionData.save();
@@ -234,7 +238,7 @@ async function DeleteTransaction(req, res) {
 
 
 async function UpdateTransaction(req, res) {
-    const { date, description, amount, paidTo, id } = req.body;
+    const { date, description, amount, paidTo,activity, id } = req.body;
     try {
         const transactionData = await TransactionModel.findOne({ id: req.session.user._id });
         if (transactionData) {
@@ -243,6 +247,7 @@ async function UpdateTransaction(req, res) {
             transactionData.transactions[index].description = description;
             transactionData.transactions[index].amount = amount;
             transactionData.transactions[index].paidTo = paidTo;
+            transactionData.transactions[index].activity = activity;
             
             const deleteAllTransaction = await TransactionModel.deleteOne({ id: req.session.user._id });
             if (deleteAllTransaction) {

@@ -47,21 +47,48 @@
                 <div><img class="icons" src="/photos/salary.png" alt="Salary"></div>
                 <div>
                     <span>Current Balance</span>
-                    <span>INR 0.00</span>
+                    <span>
+                        <% 
+            if(typeof balance != 'undefined'){ 
+              %>
+              <div class="message">
+                <p><%= balance %></p>
+              </div>
+            <% } 
+%>
+                    </span>
                 </div>
             </div>
             <div class="expenses box2">
                 <div><img class="icons" src="/photos/money.png" alt="Salary"></div>
                 <div>
-                    <span>Money</span>
-                    <span>INR 0.00</span>
+                    <span>Total Debit</span>
+                    <span>
+                        <% 
+                        if(typeof totalDebit != 'undefined'){ 
+                          %>
+                          <div class="message">
+                            <p><%= totalDebit %></p>
+                          </div>
+                        <% } 
+            %>
+                    </span>
                 </div>
             </div>
             <div class="expenses box3">
                 <div><img class="icons" src="/photos/expense.png" alt="Salary"></div>
                 <div>
-                    <span>Total Expense</span>
-                    <span>INR 0.00</span>
+                    <span>Total Credit</span>
+                    <span>
+                        <% 
+                        if(typeof totalCredit != 'undefined'){ 
+                          %>
+                          <div class="message">
+                            <p><%= totalCredit %></p>
+                          </div>
+                        <% } 
+            %>
+                    </span>
                 </div>
             </div>
             <!-- <img class="photo" src="/photos/girl.png" alt=""> -->
@@ -80,8 +107,9 @@
                         <th scope="col" width="5%">S.No</th>
                         <th scope="col" width="20%">Date</th>
                         <th scope="col" width="10%">Description</th>
-                        <th scope="col" width="10%">Paid to</th>
+                        <th scope="col" width="10%">Transaction With</th>
                         <th scope="col" width="20%">Amount</th>
+                        <th scope="col" width="10%">Credit / Debit</th>
                         <th scope="col" width="15%">Edit Data</th>
                         <th scope="col" width="15%">Delete Data</th> 
                       </tr>
@@ -96,6 +124,16 @@
                                 <td><input type="text" name="description" value="<%= transactionInfo[i].description %>"></td>
                                 <td><input type="text" name="paidTo" value="<%= transactionInfo[i].paidTo %>"></td>
                                 <td><input type="number" name="amount" value="<%= transactionInfo[i].amount %>"></td>
+                                <td> 
+                                    <select class="form-select" aria-label="Default select example" name="activity" required>
+                                        <option selected><%= transactionInfo[i].activity %></option>
+                                        <% if (transactionInfo[i].activity !== 'Credit') { %>
+                                            <option value="Credit">Credit</option>
+                                        <% } %>
+                                        <% if (transactionInfo[i].activity !== 'Debit') { %>
+                                            <option value="Debit">Debit</option>
+                                        <% } %>
+                                  </select></td>
                                 <td>
                                   <button type="submit" class="btn btn-primary"> <input type="text" value="<%= transactionInfo[i].id %>" name="id" style="width:0%;visibility: hidden;">Edit</button>
                                 </td>
@@ -142,8 +180,14 @@
                             <input type="number" class="form-control" name="amount" id="paidToInput" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Paid to:</label>
+                            <label class="form-label">Transaction with:</label>
                             <input type="text" class="form-control" name="paidTo" id="paidToInput" required>
+                        </div>
+                        <div class="mb-3">
+                            <select class="form-select" aria-label="Default select example" name="activity" required>
+                                <option selected value="Credit">Credit</option>
+                                <option value="Debit">Debit</option>
+                              </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </form>

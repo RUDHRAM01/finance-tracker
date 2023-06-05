@@ -55,7 +55,6 @@ const verifyMail = async (req, res) => {
 }
 
 const middleWare = (req, res, next) => {
-    console.log(req.session.user);
     if (req.session.user) {
         res.redirect('/dashboard');
     } else {
@@ -145,7 +144,6 @@ async function GetUserProfile(req, res) {
     try {
         const user = await User.findOne({ _id: req.session.user._id });
         if (user) {
-            console.log(user);
             res.render('Profile', { user , name:user.name });
         }
     } catch (error) {
@@ -155,9 +153,10 @@ async function GetUserProfile(req, res) {
 
 
 async function GetDashboard(req, res) {
+
     try {
-        const user = await User.findOne({ _id: req.session.user._id });
-        const transactionData = await TransactionModel.findOne({ id: req.session.user._id });
+        const user = await User.findOne({ _id: req.session.user?._id });
+        const transactionData = await TransactionModel.findOne({ id: req.session.user?._id });
         let transactionInfo = transactionData?.transactions;
         if (user) {
             res.render('Dashboard', { user,transactionInfo,balance:user.current_balance,totalDebit:user.total_withdrawals,totalCredit:user.total_deposits });
@@ -175,12 +174,10 @@ async function DoTransaction(req, res) {
     if (activity === 'Debit') {
         const newBalance = user.current_balance - amount;
         const totalDebit = user.total_withdrawals + amount;
-        console.log(newBalance, totalDebit, user.current_balance, user.total_withdrawals, amount);
         const updateResult = await User.updateOne({ _id: req.session.user._id }, { $set: { current_balance: newBalance, total_withdrawals: totalDebit } });
     } else {
         const newBalance = user.current_balance + amount;
         const totalCredit = user.total_deposits + amount;
-        console.log(newBalance, totalCredit, user.current_balance, user.total_withdrawals, amount);
         const updateResult = await User.updateOne({ _id: req.session.user._id }, { $set: { current_balance: newBalance, total_deposits: totalCredit } });
     }
         
@@ -263,7 +260,47 @@ async function DeleteTransaction(req, res) {
 
 async function UpdateTransaction(req, res) {
     let { date, description, amount, paidTo, activity, id } = req.body;
+    var transactionData = await TransactionModel.findOne({ id: req.session.user._id });
+    var transaction = transactionData.transactions.filter((item) => item.id == id);
     const user = await User.findOne({ _id: req.session.user._id });
+    amount = parseInt(amount);
+    if (activity === 'Debit' && transaction[0].activity === 'Debit') {
+        if (transaction[0].amount > amount) {
+            const newBalance = transaction[0].amount - amount + user.current_balance;
+            const totalDebit = user.total_withdrawals - (transaction[0].amount - amount);
+            const updateResult = await User.updateOne({ _id: req.session.user._id }, { $set: { current_balance: newBalance, total_withdrawals: totalDebit } });
+        } else {
+            const newBalance = user.current_balance - (amount - transaction[0].amount);
+            const totalDebit = user.total_withdrawals + (amount - transaction[0].amount);
+            const updateResult = await User.updateOne({ _id: req.session.user._id }, { $set: { current_balance: newBalance, total_withdrawals: totalDebit } });
+        }
+    } else if (activity === 'Credit' && transaction[0].activity === 'Credit') {
+        if (transaction[0].amount > amount) {
+            const newBalance = user.current_balance - (transaction[0].amount - amount);
+            const totalCredit = user.total_deposits - (transaction[0].amount - amount);
+            const updateResult = await User.updateOne({ _id: req.session.user._id }, { $set: { current_balance: newBalance, total_deposits: totalCredit } });
+        } else {
+            const newBalance = user.current_balance + (amount - transaction[0].amount);
+            const totalCredit = user.total_deposits + (amount - transaction[0].amount);
+            const updateResult = await User.updateOne({ _id: req.session.user._id }, { $set: { current_balance: newBalance, total_deposits: totalCredit } });
+        }
+    } else if (activity === 'Debit' && transaction[0].activity === 'Credit') {
+
+        const newBalance = user.current_balance - transaction[0].amount - amount;
+        const totalDebit = user.total_withdrawals + amount;
+        const totalCredit = user.total_deposits - transaction[0].amount;
+        const updateResult = await User.updateOne({ _id: req.session.user._id }, { $set: { current_balance: newBalance, total_withdrawals: totalDebit, total_deposits: totalCredit } });
+    } else if (activity === 'Credit' && transaction[0].activity === 'Debit') {
+        const newBalance = user.current_balance + transaction[0].amount + amount;
+        const totalDebit = user.total_withdrawals - transaction[0].amount;
+        const totalCredit = user.total_deposits + amount;
+        const updateResult = await User.updateOne({ _id: req.session.user._id }, { $set: { current_balance: newBalance, total_withdrawals: totalDebit, total_deposits: totalCredit } });
+    }
+
+
+
+
+        
     try {
         const transactionData = await TransactionModel.findOne({ id: req.session.user._id });
         if (transactionData) {
@@ -293,6 +330,13 @@ async function UpdateTransaction(req, res) {
     }
 }
 
+
+async function LogoutUser(req, res) {
+    req.session.destroy();
+    res.redirect('/');
+}
+
+
 module.exports = {
     RegisterUser,
     LoginUser,
@@ -304,5 +348,6 @@ module.exports = {
     GetDashboard,
     DoTransaction,
     DeleteTransaction,
-    UpdateTransaction
+    UpdateTransaction,
+    LogoutUser
 }

@@ -36,6 +36,15 @@
         border: 2px solid white;
         color: white;
     }
+.logoutButton{
+  display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background-color: rgb(255, 255, 255);
+        border: 2px solid white;
+}
+
     .update{
       display: flex;
         align-items: center;
@@ -54,7 +63,7 @@
           <div class="col">
             <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
               <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
                   User Profile
                 </li>
@@ -82,8 +91,8 @@
               </div>
               
               <div class="col-sm-12">
-                <div class="submit">
-                  <a href="/">Upload Photo</a>
+                <div class="logoutButton">
+                  <a href="/logout">Logout</a>
                 </div>
           </div>
             </div>

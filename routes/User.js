@@ -34,8 +34,15 @@ userRoute.post('/deleteTransaction', userController.securePathLayer, userControl
 
 userRoute.post('/updateTransaction', userController.securePathLayer, userController.UpdateTransaction);
 
+userRoute.get("/logout", userController.LogoutUser);
+
 userRoute.get("/", function (req, res) {
-    res.render("Home");
+    if (req.session.user) {
+        res.redirect("/dashboard");
+    }
+    else {
+        res.render("Login");
+    }
 });
 
 userRoute.get('/verify', userController.verifyMail)

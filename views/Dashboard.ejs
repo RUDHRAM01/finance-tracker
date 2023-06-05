@@ -109,9 +109,9 @@
                         <th scope="col" width="10%">Description</th>
                         <th scope="col" width="10%">Transaction With</th>
                         <th scope="col" width="20%">Amount</th>
-                        <th scope="col" width="10%">Credit / Debit</th>
-                        <th scope="col" width="15%">Edit Data</th>
-                        <th scope="col" width="15%">Delete Data</th> 
+                        <th scope="col" width="10%">Actions</th>
+                        <th scope="col" width="15%">Edit</th>
+                        <th scope="col" width="15%">Delete</th> 
                       </tr>
                     </thead>
                     <tbody id="tableBody">
@@ -135,7 +135,7 @@
                                         <% } %>
                                   </select></td>
                                 <td>
-                                  <button type="submit" class="btn btn-primary"> <input type="text" value="<%= transactionInfo[i].id %>" name="id" style="width:0%;visibility: hidden;">Edit</button>
+                                  <button type="submit" class="btn btn-primary"> <input type="text" value="<%= transactionInfo[i].id %>" name="id" style="width:0%;visibility: hidden;">Save</button>
                                 </td>
                                
                               </form>

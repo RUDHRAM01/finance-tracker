@@ -76,19 +76,34 @@
             <div class="table-responsive">
                 <table class="table table-responsive table">
                     <thead>
-                        <tr class="bg-light">
-                            <th scope="col" width="5%">S.No</th>
-                            <th scope="col" width="20%">Date</th>
-                            <th scope="col" width="10%">Action</th>
-                            <th scope="col" width="10%">Paid to</th>
-                            <th scope="col" width="20%">Amount</th>
-                            <th scope="col" width="20%">Status</th>
-                            <th scope="col" width="15%">Actions</th> <!-- New column for delete button -->
-                        </tr>
+                      <tr class="bg-light">
+                        <th scope="col" width="5%">S.No</th>
+                        <th scope="col" width="20%">Date</th>
+                        <th scope="col" width="10%">Description</th>
+                        <th scope="col" width="10%">Paid to</th>
+                        <th scope="col" width="20%">Amount</th>
+                        <th scope="col" width="15%">Actions</th> 
+                      </tr>
                     </thead>
                     <tbody id="tableBody">
-                    </tbody>
-                </table>
+                        <% if (transactionInfo !== null) { %>
+                          <% for (let i = 0; i < transactionInfo?.length; i++) { %>
+                            <tr>
+                              <th scope="row"><%= i + 1 %></th>
+                              <td><%= transactionInfo[i].date %></td>
+                              <td><%= transactionInfo[i].description %></td>
+                              <td><%= transactionInfo[i].paidTo %></td>
+                              <td><%= transactionInfo[i].amount %></td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          <% } %>
+                        <% } %>
+                      </tbody>
+                      
+                  </table>
+                  
 
             </div>
 
@@ -103,55 +118,22 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="createNewForm">
+                    <form action="/transaction" method="POST" id="createNewForm">
                         <div class="mb-3">
-                            <label for="dateInput" class="form-label">Date:</label>
-                            <input type="date" class="form-control" id="dateInput" required>
+                            <label class="form-label">Date:</label>
+                            <input type="date" class="form-control" name="date" id="dateInput" required>
                         </div>
                         <div class="mb-3">
-                            <label for="actionInput" class="form-label">Action:</label>
-                            <input type="text" class="form-control" id="actionInput" required>
+                            <label class="form-label">Description:</label>
+                            <input type="text" class="form-control" name="description" id="actionInput" required>
                         </div>
                         <div class="mb-3">
-                            <label for="paidToInput" class="form-label">Paid to:</label>
-                            <input type="text" class="form-control" id="paidToInput" required>
+                            <label class="form-label">amount</label>
+                            <input type="number" class="form-control" name="amount" id="paidToInput" required>
                         </div>
                         <div class="mb-3">
-                            <label for="amountInput" class="form-label">Amount:</label>
-                            <input type="text" class="form-control" id="amountInput" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="updateModalLabel">Update Entry</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="updateForm">
-                        <input type="hidden" id="updateSno">
-                        <div class="mb-3">
-                            <label for="updateDateInput" class="form-label">Date:</label>
-                            <input type="date" class="form-control" id="updateDateInput" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="updateActionInput" class="form-label">Action:</label>
-                            <input type="text" class="form-control" id="updateActionInput" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="updatePaidToInput" class="form-label">Paid to:</label>
-                            <input type="text" class="form-control" id="updatePaidToInput" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="updateAmountInput" class="form-label">Amount:</label>
-                            <input type="text" class="form-control" id="updateAmountInput" required>
+                            <label class="form-label">Paid to:</label>
+                            <input type="text" class="form-control" name="paidTo" id="paidToInput" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </form>
@@ -160,135 +142,11 @@
         </div>
     </div>
 
+   
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-        crossorigin="anonymous"></script>
-    <script>
-        let data = [
-           
-            
-        ];
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
 
-        function generateTableRows() {
-            const tableBody = document.getElementById('tableBody');
-
-            tableBody.innerHTML = '';
-
-            data.forEach((row) => {
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <th scope="row">${row.sno}</th>
-                    <td>${row.date}</td>
-                    <td>${row.action}</td>
-                    <td>${row.paidTo}</td>
-                    <td>${row.amount}</td>
-                    <td>${row.status ? '<input type="checkbox" checked>' : '<input type="checkbox">'}
-                    </td>
-                    <td>
-                        <button class="btn btn-primary btn-sm" onclick="updateRow(${row.sno})">Update</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteRow(${row.sno})">Delete</button>
-                    </td>
-                `;
-                tableBody.appendChild(newRow);
-            });
-        }
-
-        function handleCreateNew(event) {
-            event.preventDefault();
-            const sno = data.length + 1;
-            const date = document.getElementById('dateInput').value;
-            const action = document.getElementById('actionInput').value;
-            const paidTo = document.getElementById('paidToInput').value;
-            const amount = document.getElementById('amountInput').value;
-
-            if (date && action && paidTo && amount) {
-                const newRow = {
-                    sno,
-                    date,
-                    action,
-                    paidTo,
-                    amount,
-                    status: true,
-                };
-
-                data.push(newRow);
-                generateTableRows();
-                document.getElementById('createNewForm').reset();
-                const createNewModal = new bootstrap.Modal(document.getElementById('createNewModal'));
-                createNewModal.hide();
-            } else {
-                alert('Please enter all the fields!');
-            }
-        }
-
-        const createNewBtn = document.getElementById('createNewBtn');
-        createNewBtn.addEventListener('click', function () {
-            document.getElementById('createNewForm').reset();
-        });
-        document.getElementById('createNewForm').addEventListener('submit', handleCreateNew);
-
-        generateTableRows();
-
-        function deleteRow(sno) {
-            const rowIndex = data.findIndex((row) => row.sno === sno);
-
-            if (rowIndex !== -1) {
-                data.splice(rowIndex, 1);
-                generateTableRows();
-            }
-        }
-
-        function updateRow(sno) {
-            const rowIndex = data.findIndex((row) => row.sno === sno);
-
-            if (rowIndex !== -1) {
-                const row = data[rowIndex];
-
-                document.getElementById('updateSno').value = row.sno;
-                document.getElementById('updateDateInput').value = row.date;
-                document.getElementById('updateActionInput').value = row.action;
-                document.getElementById('updatePaidToInput').value = row.paidTo;
-                document.getElementById('updateAmountInput').value = row.amount;
-
-                const updateModal = new bootstrap.Modal(document.getElementById('updateModal'));
-                updateModal.show();
-            }
-        }
-
-        function handleUpdate(event) {
-            event.preventDefault();
-            const sno = document.getElementById('updateSno').value;
-            const date = document.getElementById('updateDateInput').value;
-            const action = document.getElementById('updateActionInput').value;
-            const paidTo = document.getElementById('updatePaidToInput').value;
-            const amount = document.getElementById('updateAmountInput').value;
-
-            if (date && action && paidTo && amount) {
-                const rowIndex = data.findIndex((row) => row.sno === +sno);
-
-                if (rowIndex !== -1) {
-                    const updatedRow = {
-                        sno: +sno,
-                        date,
-                        action,
-                        paidTo,
-                        amount,
-                        status: data[rowIndex].status,
-                    };
-
-                    data.splice(rowIndex, 1, updatedRow);
-                    generateTableRows();
-
-                    const updateModal = new bootstrap.Modal(document.getElementById('updateModal'));
-                    updateModal.hide();
-                }
-            } else {
-                alert('Please enter all the fields!');
-            }
-        }
-
-        document.getElementById('updateForm').addEventListener('submit', handleUpdate);
-    </script>
 </body>
 
 </html>

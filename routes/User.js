@@ -26,7 +26,9 @@ userRoute.get("/register", userController.middleWare, function (req, res) {
 
 userRoute.post("/register", userController.RegisterUser);
 
-userRoute.get("/dashboard",userController.securePathLayer, userController.GetDashboard);
+userRoute.get("/dashboard", userController.securePathLayer, userController.GetDashboard);
+
+userRoute.post('/transaction', userController.securePathLayer, userController.DoTransaction);
 
 userRoute.get("/", function (req, res) {
     res.render("Home");

@@ -1,4 +1,5 @@
 const User = require('../models/Users');
+const TransactionModel = require('../models/Transactions');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const saltRounds = 10;
@@ -153,10 +154,46 @@ async function GetUserProfile(req, res) {
 async function GetDashboard(req, res) {
     try {
         const user = await User.findOne({ _id: req.session.user._id });
+        const transactionData = await TransactionModel.findOne({ id: req.session.user._id });
+        let transactionInfo = transactionData?.transactions;
         if (user) {
-            res.render('Dashboard', { user });
+            res.render('Dashboard', { user,transactionInfo });
         }
     } catch (error) {
+        console.error(error);
+    }
+}
+
+
+async function DoTransaction(req, res) {
+    const { date,description,amount,paidTo } = req.body;
+    try {
+        const transactionData = await TransactionModel.findOne({ id: req.session.user._id });
+        if (transactionData === null) {
+            const transaction = new TransactionModel({
+                id: req.session.user._id,
+                transactions: [{
+                    date,
+                    description,
+                    amount,
+                    paidTo
+                }]
+            });
+            const transactionResult = await transaction.save();
+            if (transactionResult) {
+                res.redirect('/dashboard');
+            } else {
+                res.redirect('/dashboard');
+            }
+        } else {
+            const transaction = await TransactionModel.updateOne({ id: req.session.user._id }, { $push: { transactions: { date, description, amount, paidTo } } });
+            if (transaction) {
+                res.redirect('/dashboard');
+            } else {
+                res.redirect('/dashboard');
+            }
+        }
+    }catch(error) {
         console.error(error);
     }
 }
@@ -172,5 +209,6 @@ module.exports = {
     middleWare,
     securePathLayer,
     GetUserProfile,
-    GetDashboard
+    GetDashboard,
+    DoTransaction
 }

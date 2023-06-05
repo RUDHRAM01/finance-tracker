@@ -30,6 +30,10 @@ userRoute.get("/dashboard", userController.securePathLayer, userController.GetDa
 
 userRoute.post('/transaction', userController.securePathLayer, userController.DoTransaction);
 
+userRoute.post('/deleteTransaction', userController.securePathLayer, userController.DeleteTransaction);
+
+userRoute.post('/updateTransaction', userController.securePathLayer, userController.UpdateTransaction);
+
 userRoute.get("/", function (req, res) {
     res.render("Home");
 });

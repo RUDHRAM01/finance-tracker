@@ -1,7 +1,9 @@
 const User = require('../models/Users');
+const mongoose = require('mongoose');
 const TransactionModel = require('../models/Transactions');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+const { ObjectId } = mongoose.Types;
 const saltRounds = 10;
 
 const sendVerifyMail = (email, id) => {
@@ -173,6 +175,7 @@ async function DoTransaction(req, res) {
             const transaction = new TransactionModel({
                 id: req.session.user._id,
                 transactions: [{
+                    id: new ObjectId(),
                     date,
                     description,
                     amount,
@@ -186,7 +189,7 @@ async function DoTransaction(req, res) {
                 res.redirect('/dashboard');
             }
         } else {
-            const transaction = await TransactionModel.updateOne({ id: req.session.user._id }, { $push: { transactions: { date, description, amount, paidTo } } });
+            const transaction = await TransactionModel.updateOne({ id: req.session.user._id }, { $push: { transactions: {  id: new ObjectId(),date, description, amount, paidTo } } });
             if (transaction) {
                 res.redirect('/dashboard');
             } else {
@@ -199,6 +202,41 @@ async function DoTransaction(req, res) {
 }
 
 
+async function DeleteTransaction(req, res) {
+    const { id } = req.params;
+    try {
+        const transactionData = await TransactionModel.findOne({ id: req.session.user._id });
+        if (transactionData) {
+            const transaction = await TransactionModel.updateOne({ id: req.session.user._id }, { $pull: { transactions: { id: id } } });
+            if (transaction) {
+                res.redirect('/dashboard');
+            } else {
+                res.redirect('/dashboard');
+            }
+        }
+    }catch(error) {
+        console.error(error);
+    }
+}
+
+
+async function UpdateTransaction(req, res) {
+    const { id } = req.params;
+    const { date,description,amount,paidTo } = req.body;
+    try {
+        const transactionData = await TransactionModel.findOne({ id: req.session.user._id });
+        if (transactionData) {
+            const transaction = await TransactionModel.updateOne({ id: req.session.user._id }, { $set: { transactions: { id: id,date, description, amount, paidTo } } });
+            if (transaction) {
+                res.redirect('/dashboard');
+            } else {
+                res.redirect('/dashboard');
+            }
+        }
+    }catch(error) {
+        console.error(error);
+    }
+}
 
 
 module.exports = {
@@ -210,5 +248,7 @@ module.exports = {
     securePathLayer,
     GetUserProfile,
     GetDashboard,
-    DoTransaction
+    DoTransaction,
+    DeleteTransaction,
+    UpdateTransaction
 }

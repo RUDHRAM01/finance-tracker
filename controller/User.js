@@ -169,8 +169,20 @@ async function GetDashboard(req, res) {
 
 
 async function DoTransaction(req, res) {
-    const { date, description, amount, paidTo, activity } = req.body;
-    
+    let { date, description, amount, paidTo, activity } = req.body;
+    amount = parseInt(amount);
+    const user = await User.findOne({ _id: req.session.user._id });
+    if (activity === 'Debit') {
+        const newBalance = user.current_balance - amount;
+        const totalDebit = user.total_withdrawals + amount;
+        console.log(newBalance, totalDebit, user.current_balance, user.total_withdrawals, amount);
+        const updateResult = await User.updateOne({ _id: req.session.user._id }, { $set: { current_balance: newBalance, total_withdrawals: totalDebit } });
+    } else {
+        const newBalance = user.current_balance + amount;
+        const totalCredit = user.total_deposits + amount;
+        console.log(newBalance, totalCredit, user.current_balance, user.total_withdrawals, amount);
+        const updateResult = await User.updateOne({ _id: req.session.user._id }, { $set: { current_balance: newBalance, total_deposits: totalCredit } });
+    }
         
     try {
       const transactionData = await TransactionModel.findOne({ id: req.session.user._id });
@@ -217,11 +229,23 @@ async function DoTransaction(req, res) {
 
 async function DeleteTransaction(req, res) {
     const id = req.body.id;
-    console.log(id);
+    var transactionData = await TransactionModel.findOne({ id: req.session.user._id });
+    var transaction = transactionData.transactions.filter((item) => item.id == id);
+    let user = await User.findOne({ _id: req.session.user._id });
+    if (transaction[0].activity === 'Debit') {
+        const newBalance = user.current_balance + transaction[0].amount;
+        const totalDebit = user.total_withdrawals - transaction[0].amount;
+        const updateResult = await User.updateOne({ _id: req.session.user._id }, { $set: { current_balance: newBalance, total_withdrawals: totalDebit } });
+    } else {
+        const newBalance = user.current_balance - transaction[0].amount;
+        const totalCredit = user.total_deposits - transaction[0].amount;
+        const updateResult = await User.updateOne({ _id: req.session.user._id }, { $set: { current_balance: newBalance, total_deposits: totalCredit } });
+    }
+
     try {
-        const transactionData = await TransactionModel.findOne({ id: req.session.user._id });
+        var transactionData = await TransactionModel.findOne({ id: req.session.user._id });
         if (transactionData) {
-            const transaction = transactionData.transactions.filter((item) => item.id != id);
+            var transaction = transactionData.transactions.filter((item) => item.id != id);
             transactionData.transactions = transaction;
             const updateResult = await transactionData.save();
             if (updateResult) {
@@ -238,7 +262,8 @@ async function DeleteTransaction(req, res) {
 
 
 async function UpdateTransaction(req, res) {
-    const { date, description, amount, paidTo,activity, id } = req.body;
+    let { date, description, amount, paidTo, activity, id } = req.body;
+    const user = await User.findOne({ _id: req.session.user._id });
     try {
         const transactionData = await TransactionModel.findOne({ id: req.session.user._id });
         if (transactionData) {

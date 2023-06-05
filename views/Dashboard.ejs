@@ -120,10 +120,10 @@
                             <tr>
                               <form action="/updateTransaction" method="POST">
                                 <th scope="row"><%= i + 1 %></th>
-                                <td><input type="date" name="date" value="<%= transactionInfo[i].date %>"></td>
-                                <td><input type="text" name="description" value="<%= transactionInfo[i].description %>"></td>
-                                <td><input type="text" name="paidTo" value="<%= transactionInfo[i].paidTo %>"></td>
-                                <td><input type="number" name="amount" value="<%= transactionInfo[i].amount %>"></td>
+                                <td><input type="date" name="date" value="<%= transactionInfo[i].date %>" required></td>
+                                <td><input type="text" name="description" value="<%= transactionInfo[i].description %>" required></td>
+                                <td><input type="text" name="paidTo" value="<%= transactionInfo[i].paidTo %>" required></td>
+                                <td><input type="number" name="amount" value="<%= transactionInfo[i].amount %>" required></td>
                                 <td> 
                                     <select class="form-select" aria-label="Default select example" name="activity" required>
                                         <option selected><%= transactionInfo[i].activity %></option>

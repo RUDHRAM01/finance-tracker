@@ -17,7 +17,7 @@ const sendVerifyMail = (email, id) => {
                 secure: false,
                 requireTLS: true,
                 user: 'financetrackermail@gmail.com',
-                pass: 'kuuaatxdetwzebgh'
+                pass: process.env.EMAIL_PASSWORD
             }
         });
         const mailOptions = {

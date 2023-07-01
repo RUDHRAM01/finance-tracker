@@ -160,6 +160,8 @@ async function GetDashboard(req, res) {
         let transactionInfo = transactionData?.transactions;
         if (user) {
             res.render('Dashboard', { user,transactionInfo,balance:user.current_balance,totalDebit:user.total_withdrawals,totalCredit:user.total_deposits });
+        } else {
+            res.render('Dashboard',{transactionInfo : ""})
         }
     } catch (error) {
         console.error(error);

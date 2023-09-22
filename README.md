@@ -1,5 +1,5 @@
 # finance-tracker
 
-visit(fast access) : http://13.233.237.103:8000/dashboard
+visit(fast access) : http://3.111.58.206/api/dashboard
 visit : https://finance-tracker-ks95.onrender.com/
 

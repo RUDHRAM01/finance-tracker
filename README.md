@@ -1,4 +1,4 @@
 # finance-tracker
 
-visit(fast access) : http://3.111.58.206/api/dashboard
+https://finance-tracker-8h7t.onrender.com/
 
